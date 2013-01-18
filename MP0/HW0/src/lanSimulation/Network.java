@@ -203,10 +203,7 @@ public class Network {
 				report.write("\tNode '");
 				report.write(currentNode.name);
 				report.write("' accepts broadcast packet.\n");
-				report.write("\tNode '");
-				report.write(currentNode.name);
-				report.write("' passes packet on.\n");
-				report.flush();
+				reportPassedPacket(report, currentNode);
 			} catch (IOException exc) {
 				// just ignore
 			}
@@ -268,10 +265,7 @@ public class Network {
 		startNode = workstations.get(workstation);
 
 		try {
-			report.write("\tNode '");
-			report.write(startNode.name);
-			report.write("' passes packet on.\n");
-			report.flush();
+			reportPassedPacket(report, startNode);
 		} catch (IOException exc) {
 			// just ignore
 		}
@@ -280,10 +274,7 @@ public class Network {
 		while ((!packet.destination.equals(currentNode.name))
 				& (!packet.origin.equals(currentNode.name))) {
 			try {
-				report.write("\tNode '");
-				report.write(currentNode.name);
-				report.write("' passes packet on.\n");
-				report.flush();
+				reportPassedPacket(report, currentNode);
 			} catch (IOException exc) {
 				// just ignore
 			}
@@ -306,6 +297,14 @@ public class Network {
 		}
 
 		return result;
+	}
+
+	private void reportPassedPacket(Writer report, Node writtenNode)
+			throws IOException {
+		report.write("\tNode '");
+		report.write(writtenNode.name);
+		report.write("' passes packet on.\n");
+		report.flush();
 	}
 
 	private boolean printDocument(Node printer, Packet document, Writer report) {
@@ -337,26 +336,15 @@ public class Network {
 								.substring(startPos + 6, endPos);
 					}
 
-					report.write("\tAccounting -- author = '");
-					report.write(author);
-					report.write("' -- title = '");
-					report.write(title);
-					report.write("'\n");
-					report.write(">>> Postscript job delivered.\n\n");
-					report.flush();
+					writeAccountingReport(report, author, title, ">>> Postscript job delivered.\n\n");
 				} else {
 					title = "ASCII DOCUMENT";
 					if (document.message.length() >= 16) {
 						author = document.message.substring(8, 16);
 					}
 
-					report.write("\tAccounting -- author = '");
-					report.write(author);
-					report.write("' -- title = '");
-					report.write(title);
-					report.write("'\n");
-					report.write(">>> ASCII Print job delivered.\n\n");
-					report.flush();
+					writeAccountingReport(report, author, title, ">>> ASCII Print job delivered.\n\n");
+					
 				}
 
 			} catch (IOException exc) {
@@ -373,6 +361,17 @@ public class Network {
 			}
 			return false;
 		}
+	}
+
+	private void writeAccountingReport(Writer report, String author,
+			String title, String jobType) throws IOException {
+		report.write("\tAccounting -- author = '");
+		report.write(author);
+		report.write("' -- title = '");
+		report.write(title);
+		report.write("'\n");
+		report.write(jobType);
+		report.flush();
 	}
 
 	/**
