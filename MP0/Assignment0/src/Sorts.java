@@ -34,6 +34,9 @@ public class Sorts
 		temp=arr[index1];
 		arr[index1]=arr[index2];
 		arr[index2]=temp;
+		
+		
+		return;
 	}
 	
 	
@@ -43,7 +46,7 @@ public class Sorts
 	 * 			used for recursive calls
 	 * @return - sent array is sorted
 	 */
-	public static void quicksort(int arr[], int start, int end)
+	public static void quickSort(int arr[], int start, int end)
 	{
 		if(start<end)
 		{
@@ -55,7 +58,7 @@ public class Sorts
 			i++;
 			
 			
-			while(i<k)
+			while(i<=k)
 			{
 				while(i<=k && arr[i]<=arr[start])
 				{
@@ -75,8 +78,8 @@ public class Sorts
 			
 			swap(arr, start, k);
 			
-			quicksort(arr, start, k-1);
-			quicksort(arr, k+1, end);
+			quickSort(arr, start, k-1);
+			quickSort(arr, k+1, end);
 		}
 		
 		
@@ -135,7 +138,74 @@ public class Sorts
 			}
 			swap(arr, minIndex, index1);
 		}
+		
+		
+		return;
 	}
 	
+	/* Merge Sort
+	 * 
+	 * @param - int array, starting index, and ending index. index's are primarily
+	 * 			used for recursive calls
+	 * @return - sent array is sorted
+	 */
+	public static void mergeSort(int arr[], int start, int end)
+	{
+		if(start<end)
+		{
+			int midIndex=(end-start)/2+start;
+			mergeSort(arr, start, midIndex);
+			mergeSort(arr, midIndex+1, end);
+			
+			merge(arr, start, midIndex, end);			
+		}
+		
+		
+		return;
+	}
 	
+	private static void merge(int arr[], int start1, int end1, int end2)
+	{
+		int start2=end1+1;
+		int start1Dup=start1;
+		int sorted[]=new int[end2-start1+1];
+		int index=0;
+		
+		
+		while(start1<end1 && start2<end2)
+		{
+			if(arr[start1]<arr[start2])
+			{
+				sorted[index]=arr[start1];
+				start1++;
+			}
+			else
+			{
+				sorted[index]=arr[start2];
+				start2++;
+			}
+			index++;
+		}
+		
+		while(start1<end1)
+		{
+			sorted[index]=arr[start1];
+			start1++;
+			index++;
+		}
+		while(start2<end2)
+		{
+			sorted[index]=arr[start2];
+			start2++;
+			index++;
+		}
+		
+		for(int ind=start1Dup; ind<end2; ind++)
+		{
+			arr[ind]=sorted[ind-start1Dup];
+		}
+		
+		
+		return;
+	}
 }

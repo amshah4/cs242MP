@@ -24,7 +24,32 @@ public class Main
 			values4[index]=randVal;
 		}
 		
+		BubbleSortThread t1=new BubbleSortThread(values1);
+		SelectionSortThread t2=new SelectionSortThread(values2);
+		MergeSortThread t3=new MergeSortThread(values3);
+		QuickSortThread t4=new QuickSortThread(values4);
 		
 		
+		t1.start();
+		t2.start();
+		t3.start();
+		t4.start();
+		
+		
+		return;
+	}
+
+
+/* Thread-safe way of printing
+ * 
+ * @param - String
+ * @return - mesage printed to System.out
+ */
+	public synchronized static void println(String message)
+	{
+		System.out.println(message);
+		
+		
+		return;
 	}
 }
